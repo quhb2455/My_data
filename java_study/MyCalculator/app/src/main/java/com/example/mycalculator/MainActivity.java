@@ -3,6 +3,7 @@ package com.example.mycalculator;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,18 +17,20 @@ public class MainActivity extends AppCompatActivity {
     boolean isFirstInput = true;
     boolean isNumber = false;
     boolean islog = true;
-    boolean isInNumber = false;// 입력 중인 숫자가 1개이면 false 2개이면 true;
+//    boolean isInNumber = false;// 입력 중인 숫자가 1개이면 false 2개이면 true;
     int resultNumber = 0;
     int Clickcnt = -1;
+    int historyChk = 0;
 
     //expression 배열에 식을 넣기 전처리를 위한 배열
     String[] before_chk = new String[20];
     String[] expression = null;
 
-
+    Memory MyMemory = new Memory();
 
 
     TextView resultText;
+    TextView historyText;
 
 
 
@@ -36,6 +39,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         resultText = findViewById(R.id.result_text);
+        historyText = findViewById(R.id.history_text);
+        historyText.setMovementMethod(new ScrollingMovementMethod());
+
 
     }
 
@@ -93,15 +99,16 @@ public class MainActivity extends AppCompatActivity {
                 if(!isNumber)
                 {
                     Toast.makeText(getApplicationContext(),"식을 완성해야합니다.", Toast.LENGTH_LONG).show();
-                }else
+                }else if(Clickcnt != 0)
                 {
                     expression = new String[Clickcnt+1];
-                    Log.i("AA", " 0번값 : " + expression[0] + " // 1번값 : " + expression[1]);
+//                    Log.i("AA", " 0번값 : " + expression[0] + " // 1번값 : " + expression[1]);
                     for(int j = 0; j < expression.length;j ++)
                     {
                         expression[j] = before_chk[j];
                         Log.i("bb", j+" 번값 : " + expression[j] );
                     }
+
 
                     //계산 함수가 있는 클래스 객체 생성 및 생성자로 arryleng를 넘김
                     Calculator cal = new Calculator(Clickcnt);
@@ -114,6 +121,29 @@ public class MainActivity extends AppCompatActivity {
                     resultText.setText(expression[0]);
 
 
+                    ///★☆★☆★☆///////history///////★☆★☆★☆///
+                    ///★☆★☆★☆///////history///////★☆★☆★☆///
+                    MyMemory.InputMemory(before_chk, expression[0], expression.length);
+                    if(historyChk == 0)
+                    {
+                        historyText.setText(MyMemory.MemoryExpression[0]);
+                        for(int i = 1; i < expression.length + 2; i++)
+                        {
+                            historyText.append(MyMemory.MemoryExpression[i]);
+                        }
+                        historyChk++;
+                    }else
+                    {
+                        historyText.append("\n");
+                        for(int i = 0; i <  expression.length + 2; i++)
+                        {
+                            historyText.append(MyMemory.MemoryExpression[i]);
+                        }
+                        historyChk++;
+                    }
+                    ///★☆★☆★☆///////history///////★☆★☆★☆///
+                    ///★☆★☆★☆///////history///////★☆★☆★☆///
+
                     // 계산이 끝나면 결과값이 0번에 들어가고 다음 수식은 1번 인덱스부터 들어간다.
                     before_chk = new String[20];
                     before_chk[0] = expression[0];
@@ -124,6 +154,10 @@ public class MainActivity extends AppCompatActivity {
                         Log.i("expression","배열 값" + expression[b]);
                         Log.i("before_chk","배열 값" + before_chk[b]);
                     }
+
+                }else
+                {
+                    Toast.makeText(getApplicationContext(),"식을 완성해야합니다.", Toast.LENGTH_LONG).show();
                 }
 
                 break;
