@@ -12,6 +12,44 @@ public class Calculator {
     }
 
 
+    public String[] calculatorForBracket(String[] expression, int arryleng)
+    {
+
+        for(int i = arryleng; i >= 0; i --)
+        {
+            if( expression[i].equals("("))
+            {
+                for(int j = i;  j < arryleng+1; j++)
+                {
+                    if( expression[j].equals(")"))
+                    {
+                        String[] e1 = new String[(j - i) - 1];
+                        int n = 0;
+                        for(int k = i+1; k < j; k++)
+                        {
+                            e1[n] = expression[k];
+                            n++;
+                        }
+                        e1 = calculatorForLog(e1, e1.length);
+                        e1 = calculatorForProdcut_Divide(e1, this.arryleng);
+                        e1 = calculatorForPlus_Minus(e1, this.arryleng);
+
+                        this.arryleng = arryleng - e1.length;
+                        expression = moveIndexForBracket(expression, Double.parseDouble(e1[0]), i,j);
+
+                        break;
+                    }
+                }
+
+
+            }
+
+        }
+
+        return expression;
+    }
+
+
     //제곱, log, 루트 계산
     public String[] calculatorForLog(String[] expression, int arryleng)
     {
@@ -267,6 +305,25 @@ public class Calculator {
         expression[expression.length - 1] = null;
 
         return expression;
+    }
+
+    public String[] moveIndexForBracket(String[] expression, double value, int left, int right)
+    {
+
+        expression[left] = Double.toString(value);
+        left++;
+        for(int i = right+1; i < expression.length; i++)
+        {
+            expression[left] = expression[i];
+            left++;
+        }
+        for(int i = left; i < expression.length; i++)
+        {
+            expression[i] = "";
+        }
+
+
+        return  expression;
     }
 
 

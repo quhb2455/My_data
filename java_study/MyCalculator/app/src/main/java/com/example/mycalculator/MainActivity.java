@@ -17,10 +17,14 @@ public class MainActivity extends AppCompatActivity {
     boolean isFirstInput = true;
     boolean isNumber = false;
     boolean islog = true;
+
 //    boolean isInNumber = false;// 입력 중인 숫자가 1개이면 false 2개이면 true;
     int resultNumber = 0;
     int Clickcnt = -1;
     int historyChk = 0;
+
+    int left_bracket = 0;
+    int right_bracket = 0;
 
     //expression 배열에 식을 넣기 전처리를 위한 배열
     String[] before_chk = new String[20];
@@ -49,16 +53,24 @@ public class MainActivity extends AppCompatActivity {
     {
 
         Button getButton = findViewById(view.getId());
-
-
+        //점이 찍히면 비활성화 시키고, 연산자가 들어오면 다시 활성화, 정답이 실수면 비활성화
+        Button dot_button = findViewById(R.id.dot_button);
+        Button left_barcket_button = findViewById(R.id.left_bracket_button);
+        Button right_barcket_button = findViewById(R.id.right_bracket_button);
         switch (view.getId())
         {
             case R.id.clear_button:
                 isFirstInput = true;
                 isNumber = false;
                 islog = true;
+                dot_button.setEnabled(true);
+                left_barcket_button.setEnabled(true);
+                right_barcket_button.setEnabled(true);
+
                 resultNumber = 0;
                 Clickcnt = -1;
+                left_bracket = 0;
+                right_bracket = 0;
                 before_chk = new String[20];
 
                 resultText.setTextColor(0xff8A8A8A);
@@ -87,7 +99,9 @@ public class MainActivity extends AppCompatActivity {
                     resultText.append(getButton.getText().toString());
                     isNumber = false;
                     islog = true;
-
+                    dot_button.setEnabled(true);
+                    left_barcket_button.setEnabled(true);
+                    right_barcket_button.setEnabled(true);
                 }
 
                 break;
@@ -114,7 +128,9 @@ public class MainActivity extends AppCompatActivity {
                     Calculator cal = new Calculator(Clickcnt);
                     Log.i("cc", " 0번값 : " + expression[0] + " // 1번값 : " + expression[1]);
 
-                    expression = cal.calculatorForLog(expression, Clickcnt);
+
+                    expression = cal.calculatorForBracket(expression,Clickcnt);
+                    expression = cal.calculatorForLog(expression, cal.arryleng);
                     expression = cal.calculatorForProdcut_Divide(expression, cal.arryleng);
                     expression = cal.calculatorForPlus_Minus(expression, cal.arryleng);
                     Log.i("dd", " 0번값 : " + expression[0] + " // 1번값 : " + expression[1]);
@@ -148,6 +164,10 @@ public class MainActivity extends AppCompatActivity {
                     before_chk = new String[20];
                     before_chk[0] = expression[0];
                     Clickcnt = 0;
+
+                    dot_button.setEnabled(false);//계산하면 모두 실수로 나오기 때문에 비활성화 해준다.
+                    left_barcket_button.setEnabled(false);
+                    right_barcket_button.setEnabled(false);
 
                     for(int b = 0; b < expression.length; b++)
                     {
@@ -221,11 +241,18 @@ public class MainActivity extends AppCompatActivity {
                 break;
 */
             case R.id.dot_button:
+                if(isFirstInput || !isNumber)
+                {
+                    Toast.makeText(getApplicationContext(),"숫자를 먼저 입력하셔야 합니다.", Toast.LENGTH_LONG).show();
+                }
                 if(isNumber && !islog)
                 {
                     before_chk[Clickcnt] = before_chk[Clickcnt] + getButton.getText().toString();
                     resultText.append(getButton.getText().toString());
                     isNumber = false;
+                    dot_button.setEnabled(false);
+                    left_barcket_button.setEnabled(false);
+                    right_barcket_button.setEnabled(false);
                     Clickcnt--;
                 }
                 break;
@@ -234,8 +261,12 @@ public class MainActivity extends AppCompatActivity {
             //boolean으로 선언된거 전부를 int형 배열로 만들어서 before_chk에 입력될때 마다
             //int형 배열에 입력한 후 backSpace로 지울때 마다 확인해서 지금 숫자를 받아야되는지
             //연산자를 받아야되는지 구별
-            /*
+
+
             case R.id.bs_button:
+                Toast.makeText(getApplicationContext(),"혼또니 스미마셍!!\n아직 덜 만들었어요!", Toast.LENGTH_LONG).show();
+                break;
+            /*
                 if(isInNumber)// 입력 중인 숫자가 1개이면 false 2개이면 true;
                 {
                     String getResultText = resultText.getText().toString();
@@ -283,6 +314,49 @@ public class MainActivity extends AppCompatActivity {
 
                 break;
                 */
+            case R.id.left_bracket_button:
+                if(isNumber)
+                {
+                    Toast.makeText(getApplicationContext(),"부호를 먼저 넣어야합니다.", Toast.LENGTH_LONG).show();
+                }else if(isFirstInput)
+                {
+                    Clickcnt ++;
+                    left_bracket++;
+                    resultText.setText(getButton.getText().toString());
+                    before_chk[Clickcnt] = getButton.getText().toString();
+                    isFirstInput = false;
+                    isNumber = false;
+                }else
+                {
+                    Clickcnt ++;
+                    left_bracket++;
+                    resultText.append(getButton.getText().toString());
+                    before_chk[Clickcnt] = getButton.getText().toString();
+                    isNumber = false;
+                }
+
+                break;
+
+            case R.id.right_bracket_button:
+
+
+                if(isFirstInput || (right_bracket >= left_bracket))
+                {
+                    Toast.makeText(getApplicationContext(),"왼쪽 괄호를 먼저 넣어야합니다.", Toast.LENGTH_LONG).show();
+
+                }else if((!isNumber && !islog) || (!isNumber && islog))
+                {
+                    Toast.makeText(getApplicationContext(),"숫자를 먼저 넣어야합니다.", Toast.LENGTH_LONG).show();
+                }else
+                {
+                    Clickcnt ++;
+                    right_bracket++;
+                    resultText.append(getButton.getText().toString());
+                    before_chk[Clickcnt] = getButton.getText().toString();
+                    isNumber = true;
+                }
+
+                break;
 
 
                 //0 ~ 9까지 숫자가 들어오면 실행

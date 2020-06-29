@@ -55,7 +55,7 @@
         android:layout_height="0dp"
         android:layout_weight="60"
         android:orientation="vertical"
-        android:weightSum="100"
+        android:weightSum="120"
         android:padding="10dp">
 
         <LinearLayout
@@ -68,7 +68,7 @@
             <Button
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="20"
+                android:layout_weight="25"
                 android:text="log"
                 android:textSize="20sp"
                 android:onClick="buttonClick"
@@ -77,7 +77,7 @@
             <Button
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="20"
+                android:layout_weight="25"
                 android:text="^"
                 android:textSize="20sp"
                 android:onClick="buttonClick"
@@ -86,7 +86,7 @@
             <Button
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="20"
+                android:layout_weight="25"
                 android:text="EXP"
                 android:textSize="20sp"
                 android:onClick="buttonClick"
@@ -95,21 +95,57 @@
             <Button
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="20"
+                android:layout_weight="25"
                 android:text="sqrt"
                 android:textSize="15sp"
                 android:onClick="buttonClick"
                 android:id="@+id/sqrt_button"/>
 
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="20"
+            android:orientation="horizontal"
+            android:weightSum="100">
             <Button
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="20"
+                android:layout_weight="25"
+                android:text="("
+                android:textSize="20sp"
+                android:onClick="buttonClick"
+                android:id="@+id/left_bracket_button"/>
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="25"
+                android:text=")"
+                android:textSize="20sp"
+                android:onClick="buttonClick"
+                android:id="@+id/right_bracket_button"/>
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="25"
+                android:text="Back\nSpace"
+                android:textSize="15sp"
+                android:onClick="buttonClick"
+                android:id="@+id/bs_button"/>
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="25"
                 android:text="c"
                 android:textSize="20sp"
                 android:onClick="buttonClick"
                 android:id="@+id/clear_button"/>
-
 
         </LinearLayout>
 
