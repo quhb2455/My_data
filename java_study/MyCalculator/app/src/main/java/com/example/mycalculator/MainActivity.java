@@ -14,11 +14,11 @@ import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity {
 
+    boolean CN = false;
     boolean isFirstInput = true;
     boolean isNumber = false;
     boolean islog = true;
-
-//    boolean isInNumber = false;// 입력 중인 숫자가 1개이면 false 2개이면 true;
+    boolean isInNumber = false;// 입력 중인 숫자가 1개이면 false 2개이면 true;
     int resultNumber = 0;
     int Clickcnt = -1;
     int historyChk = 0;
@@ -63,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
                 isFirstInput = true;
                 isNumber = false;
                 islog = true;
+                isInNumber = false;
+
                 dot_button.setEnabled(true);
                 left_barcket_button.setEnabled(true);
                 right_barcket_button.setEnabled(true);
@@ -264,8 +266,152 @@ public class MainActivity extends AppCompatActivity {
 
 
             case R.id.bs_button:
-                Toast.makeText(getApplicationContext(),"혼또니 스미마셍!!\n아직 덜 만들었어요!", Toast.LENGTH_LONG).show();
+
+                if(Clickcnt<0){
+                    isFirstInput = true;
+                    isNumber = false;
+                    islog = true;
+                    isInNumber = false; // 입력 중인 숫자가 1개이면 false 2개이면 true;
+                    Clickcnt = -1;
+
+                    resultText.setTextColor(0xff8A8A8A);
+                    resultText.setText("0");
+                    break;
+                }
+                if(before_chk[Clickcnt].contains("log")) {
+
+                    String getResultText2 = resultText.getText().toString();
+                    String subString1 = getResultText2.substring(0, getResultText2.length() - 3);
+                    resultText.setText(subString1);
+
+                    before_chk[Clickcnt] = null;
+                    isNumber = false;
+                    // islog=true;
+                    Clickcnt--;
+                    Toast.makeText(getApplicationContext(),"Backspace 한번 더 눌러주세요.", Toast.LENGTH_LONG).show();
+                    break;
+                }else if(before_chk[Clickcnt].contains("EXP")){
+
+                        String getResultText2 = resultText.getText().toString();
+                        String subString1 = getResultText2.substring(0,getResultText2.length() -3);
+                        resultText.setText(subString1);
+
+                        before_chk[Clickcnt]=null;
+                        isNumber=false;
+                        // islog=true;
+                        Clickcnt --;
+                    Toast.makeText(getApplicationContext(),"Backspace 한번 더 눌러주세요.", Toast.LENGTH_LONG).show();
+                        break;
+                }else if(before_chk[Clickcnt].equals("sqrt")){
+
+                String getResultText2 = resultText.getText().toString();
+                String subString1 = getResultText2.substring(0,getResultText2.length() -4);
+                resultText.setText(subString1);
+
+                    before_chk[Clickcnt]=null;
+                    isNumber=true;
+                    CN=true;
+                    Clickcnt --;
+                    Toast.makeText(getApplicationContext(),"Backspace 한번 더 눌러주세요.", Toast.LENGTH_LONG).show();
+                    break;
+                }
+
+                String getResultText = before_chk[Clickcnt]; // = resultText.getText().toString();
+                before_chk[Clickcnt] = getResultText.substring(0,getResultText.length() -1);
+
+                String getResultText1 = resultText.getText().toString();
+                String subString = getResultText1.substring(0,getResultText1.length() -1);
+                resultText.setText(subString);
+
+
+
+               if(getResultText.contains(".*[0-9].*")){
+                    if(isInNumber=false){
+                        before_chk[Clickcnt]=null;
+                            isInNumber=true;
+                        Clickcnt --;
+                        if(Clickcnt==0)isFirstInput=true;
+                    }else{
+                        before_chk[Clickcnt]=subString;
+                        if(before_chk[Clickcnt].length()<2)
+                        { isInNumber=false;}
+                    }
+                }else if(getResultText.contains("(")){
+
+                   before_chk[Clickcnt]=null;
+                   isNumber=false;
+                   // islog=true;
+                   Clickcnt --;
+                   left_bracket--;
+
+                }else if(getResultText.contains(")")) {
+
+                   before_chk[Clickcnt]=null;
+                   isNumber=true;
+                   CN=true;
+                   Clickcnt --;
+                   right_bracket--;
+               }else{
+                    before_chk[Clickcnt]=null;
+                    isNumber=true;
+                    CN=true;
+                    Clickcnt --;
+                }
+
                 break;
+                /*
+                Toast.makeText(getApplicationContext(),"혼또니 스미마셍!!\n아직 덜 만들었어요!", Toast.LENGTH_LONG).show();
+                if(isFirstInput)
+                {
+
+                }else if((isNumber && !islog) && !isInNumber) //입력 숫자 1개
+                {
+                    if(Clickcnt <= 0)
+                    {//첨부터 다시 시작
+                        isFirstInput = true;
+                        isNumber = false;
+                        islog = true;
+                        isInNumber = false; // 입력 중인 숫자가 1개이면 false 2개이면 true;
+                        Clickcnt = -1;
+
+                        resultText.setTextColor(0xff8A8A8A);
+                        resultText.setText("0");
+
+                    }else{
+                        before_chk[Clickcnt] = "";
+                        Clickcnt--;
+
+
+                        String getResultText = resultText.getText().toString();
+                        String subString = getResultText.substring(0,getResultText.length() -1);
+                        resultText.setText(subString);
+
+                    }
+
+
+                    for(int b = 0; b < before_chk.length; b++)
+                    {
+                        Log.i("delete - - 2",b+"값 : " + before_chk[b] + " click 값 : " + Clickcnt);
+                    }
+
+                }else if((isNumber && !islog) && isInNumber) //입력 숫자 2개
+                {
+                    String getResultText = before_chk[Clickcnt]; // = resultText.getText().toString();
+                    before_chk[Clickcnt] = getResultText.substring(0,getResultText.length() -1);
+
+                    String getResultText1 = resultText.getText().toString();
+                    String subString = getResultText1.substring(0,getResultText1.length() -1);
+                    resultText.setText(subString);
+
+                    Clickcnt--;
+
+                }else if((!isNumber && !islog) || (!isNumber && islog)) //로그함수나 연산자가 나올 때
+                {
+
+                }
+
+                break;
+                //////아래쪽은 구버전*/
             /*
                 if(isInNumber)// 입력 중인 숫자가 1개이면 false 2개이면 true;
                 {
@@ -372,6 +518,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.num_9_button:
                 if(!isNumber)
                 {
+                    CN=true;
                     isNumber = true;
                     islog = false;
                     Clickcnt ++;
@@ -395,11 +542,12 @@ public class MainActivity extends AppCompatActivity {
                     if(before_chk[Clickcnt] == null)
                     {
                         before_chk[Clickcnt] = getButton.getText().toString();
+                        isInNumber = false;
 
                     }else
                     {
                         before_chk[Clickcnt] = before_chk[Clickcnt] + getButton.getText().toString();
-
+                        isInNumber = true;
                     }
 //                    Log.i("array","누른거"+getButton.getText().toString());
 //                    Log.i("array","숫자"+cal.expression[Clickcnt]+" 클릭 카운트 : " + Clickcnt + "다음 인덱스 값 : " + cal.expression[Clickcnt + 1] + "이전 인덱스 값 : " + cal.expression[Clickcnt - 1]);
@@ -411,5 +559,5 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),getButton.getText().toString() + " 버튼이 클릭 되었습니다.", Toast.LENGTH_LONG).show();
                 break;
         }
-    }
+     }
 }

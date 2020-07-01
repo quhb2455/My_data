@@ -12,6 +12,7 @@ public class Memory {
 
     String[] MemoryExpression = new String[20];
 
+
     public void InputMemory(String[] expression, String answer, int arryleng)
     {
 
