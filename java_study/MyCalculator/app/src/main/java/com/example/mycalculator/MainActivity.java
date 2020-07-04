@@ -187,6 +187,12 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.exp_button:
 
+            case R.id.history_clear_button:
+
+                historyText.setText(" ");
+                historyChk = 0;
+                break;
+
             case R.id.log_button:
 
             case R.id.sqrt_button:
