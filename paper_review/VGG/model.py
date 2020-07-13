@@ -30,9 +30,52 @@ from keras.layers import Activation, Dense, Flatten, MaxPooling2D, Input
 #         return input_shape
 
 
+def double_conv_max(filter) :
+    def f(input) :
+
+        conv1 = Conv2D(filters=filter, kernel_size=(3, 3), strides=(1, 1), padding='same')(input)
+        activation1 = Activation("relu")(conv1)
+        conv2 = Conv2D(filters=filter, kernel_size=(3, 3), strides=(1, 1), padding='same')(activation1)
+        activation2 = Activation("relu")(conv2)
+        max_conv = MaxPooling2D((2, 2), strides=2)(activation2)
+
+        return max_conv
+    return f
 
 
-def conv_max_11(filter) :
+def triple_conv_max(filter):
+    def f(input):
+        conv1 = Conv2D(filters=filter, kernel_size=(3, 3), strides=(1, 1), padding='same')(input)
+        activation1 = Activation("relu")(conv1)
+        conv2 = Conv2D(filters=filter, kernel_size=(3, 3), strides=(1, 1), padding='same')(activation1)
+        activation2 = Activation("relu")(conv2)
+        conv3 = Conv2D(filters=filter, kernel_size=(3, 3), strides=(1, 1), padding='same')(activation2)
+        activation3 = Activation("relu")(conv3)
+        max_conv = MaxPooling2D((2, 2), strides=2)(activation3)
+
+        return max_conv
+
+    return f
+
+
+def forth_conv_max(filter):
+    def f(input):
+        conv1 = Conv2D(filters=filter, kernel_size=(3, 3), strides=(1, 1), padding='same')(input)
+        activation1 = Activation("relu")(conv1)
+        conv2 = Conv2D(filters=filter, kernel_size=(3, 3), strides=(1, 1), padding='same')(activation1)
+        activation2 = Activation("relu")(conv2)
+        conv3 = Conv2D(filters=filter, kernel_size=(3, 3), strides=(1, 1), padding='same')(activation2)
+        activation3 = Activation("relu")(conv3)
+        conv4 = Conv2D(filters=filter, kernel_size=(3, 3), strides=(1, 1), padding='same')(activation3)
+        activation4 = Activation("relu")(conv4)
+        max_conv = MaxPooling2D((2, 2), strides=2)(activation4)
+
+        return max_conv
+
+    return f
+
+
+def conv_max_11(filter,conv_1=False) :
 
     def f(input) :
 
@@ -52,28 +95,21 @@ def conv_max_11(filter) :
 
             max_conv = MaxPooling2D((2, 2), strides=2)(activation)
             return max_conv
-        elif filter >= 256 :
-            conv1 = Conv2D(filters=filter, kernel_size=(3, 3), strides=(1, 1), padding='same')(input)
-            activation1 = Activation("relu")(conv1)
-            conv2 = Conv2D(filters=filter, kernel_size=(3, 3), strides=(1, 1), padding='same')(activation1)
-            activation2 = Activation("relu")(conv2)
-            max_conv = MaxPooling2D((2, 2), strides=2)(activation2)
 
-            return max_conv
+        elif filter >= 256 :
+            result = double_conv_max(filter)(input)
+
+            return result
 
     return f
 
-def conv_max_13(filter) :
+def conv_max_13(filter, conv_1=False) :
 
     def f(input) :
 
-        conv1 = Conv2D(filters=filter, kernel_size=(3, 3), strides=(1, 1), padding='same')(input)
-        activation1 = Activation("relu")(conv1)
-        conv2 = Conv2D(filters=filter, kernel_size=(3, 3), strides=(1, 1), padding='same')(activation1)
-        activation2 = Activation("relu")(conv2)
-        max_conv = MaxPooling2D((2, 2), strides=2)(activation2)
+        result = double_conv_max(filter)(input)
 
-        return max_conv
+        return result
 
     return f
 
@@ -83,13 +119,10 @@ def conv_max_16(filter, conv_1 = False):
     def f (input) :
 
         if filter < 256:
-            conv1 = Conv2D(filters=filter, kernel_size=(3, 3), strides=(1, 1), padding='same')(input)
-            activation1 = Activation("relu")(conv1)
-            conv2 = Conv2D(filters=filter, kernel_size=(3, 3), strides=(1, 1), padding='same')(activation1)
-            activation2 = Activation("relu")(conv2)
-            max_conv = MaxPooling2D((2, 2), strides=2)(activation2)
 
-            return max_conv
+            result = double_conv_max(filter)(input)
+
+            return result
 
         elif filter >= 256:
             conv1 = Conv2D(filters=filter, kernel_size=(3, 3), strides=(1, 1), padding='same')(input)
@@ -109,103 +142,81 @@ def conv_max_16(filter, conv_1 = False):
 
     return f
 
-def conv_max_19(filter):
+def conv_max_19(filter, conv_1=False):
 
     def f(input):
 
         if filter < 256:
-            conv1 = Conv2D(filters=filter, kernel_size=(3, 3), strides=(1, 1), padding='same')(input)
-            activation1 = Activation("relu")(conv1)
-            conv2 = Conv2D(filters=filter, kernel_size=(3, 3), strides=(1, 1), padding='same')(activation1)
-            activation2 = Activation("relu")(conv2)
-            max_conv = MaxPooling2D((2, 2), strides=2)(activation2)
+            result = double_conv_max(filter)(input)
 
-            return max_conv
+            return result
 
         elif filter >= 256:
-            conv1 = Conv2D(filters=filter, kernel_size=(3, 3), strides=(1, 1), padding='same')(input)
-            activation1 = Activation("relu")(conv1)
-            conv2 = Conv2D(filters=filter, kernel_size=(3, 3), strides=(1, 1), padding='same')(activation1)
-            activation2 = Activation("relu")(conv2)
-            conv3 = Conv2D(filters=filter, kernel_size=(3, 3), strides=(1, 1), padding='same')(activation2)
-            activation3 = Activation("relu")(conv3)
-            conv4 = Conv2D(filters=filter, kernel_size=(3, 3), strides=(1, 1), padding='same')(activation3)
-            activation4 = Activation("relu")(conv4)
-            max_conv = MaxPooling2D((2, 2), strides=2)(activation4)
+            result = forth_conv_max(filter)(input)
 
-            return max_conv
+            return result
 
     return f
 
 
-def Conv_layer(layer, conv_1 = False) :
+def conv_block(conv_max,conv_1 = False):
 
     def f(input):
-
         filter = 64
-        if layer == 11 :
-            convolutional_layer = conv_max_11(filter)(input)
-            filter = filter * 2
-            for i in range(4) :
-                convolutional_layer = conv_max_11(filter)(convolutional_layer)
-                if filter != 512:
-                    filter = filter * 2
 
-            return  convolutional_layer
+        convolutional_layer = conv_max(filter,conv_1)(input)
+        filter = filter * 2
+        for i in range(4):
+            convolutional_layer = conv_max(filter,conv_1)(convolutional_layer)
+            if filter != 512:
+                filter = filter * 2
 
-        if layer == 13 :
-            convolutional_layer = conv_max_13(filter)(input)
-            filter = filter * 2
-            for i in range(4) :
-                convolutional_layer = conv_max_13(filter)(convolutional_layer)
-                if filter != 512:
-                    filter = filter * 2
+        return convolutional_layer
 
-            return convolutional_layer
-
-        if layer == 16 :
-            convolutional_layer = conv_max_16(filter)(input)
-            filter = filter * 2
-            for i in range(4) :
-                convolutional_layer = conv_max_16(filter,conv_1)(convolutional_layer)
-                if filter != 512:
-                    filter = filter * 2
-
-            return convolutional_layer
-
-
-        if layer == 19:
-            convolutional_layer = conv_max_19(filter)(input)
-            filter = filter * 2
-            for i in range(4):
-                convolutional_layer = conv_max_19(filter)(convolutional_layer)
-                if filter != 512:
-                    filter = filter * 2
-
-            return convolutional_layer
-
-    return  f
+    return f
 
 
 def make_model(layer, conv_1 = False) :
 
     input = Input(shape=(224,224,3))
 
-    if layer == 11 :
-        # LRN_11 = LRN
-        conv_block = Conv_layer(layer)(input)
+    filter = 64
+    if layer == 11:
+        convolutional_layer = conv_block(conv_max_11,conv_1)(input)
+
+        # return convolutional_layer
 
     if layer == 13:
-        conv_block = Conv_layer(layer)(input)
+        convolutional_layer = conv_block(conv_max_13,conv_1)(input)
 
-    if layer == 16 :
-        conv1_16 = conv_1
-        conv_block = Conv_layer(layer, conv1_16)(input)
+        # return convolutional_layer
 
-    if layer == 19 :
-        conv_block = Conv_layer(layer)(input)
+    if layer == 16:
+        convolutional_layer = conv_block(conv_max_16,conv_1)(input)
 
-    flatten = Flatten()(conv_block)
+
+        # return convolutional_layer
+
+    if layer == 19:
+        convolutional_layer = conv_block(conv_max_19,conv_1)(input)
+
+        # return convolutional_layer
+
+    # if layer == 11 :
+    #     # LRN_11 = LRN
+    #     conv_block = Conv_layer(layer)(input)
+    #
+    # if layer == 13:
+    #     conv_block = Conv_layer(layer)(input)
+    #
+    # if layer == 16 :
+    #     conv1_16 = conv_1
+    #     conv_block = Conv_layer(layer, conv1_16)(input)
+    #
+    # if layer == 19 :
+    #     conv_block = Conv_layer(layer)(input)
+
+    flatten = Flatten()(convolutional_layer)
     dense1 = Dense(units=4096, activation="relu")(flatten)
     dense2 = Dense(units=4096, activation="relu")(dense1)
     Last_layer = Dense(units=1000, activation="softmax")(dense2)
