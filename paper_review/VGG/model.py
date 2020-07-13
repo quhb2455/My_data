@@ -58,7 +58,7 @@ def triple_conv_max(filter):
     return f
 
 
-def forth_conv_max(filter):
+def quadruple_conv_max(filter):
     def f(input):
         conv1 = Conv2D(filters=filter, kernel_size=(3, 3), strides=(1, 1), padding='same')(input)
         activation1 = Activation("relu")(conv1)
@@ -152,7 +152,7 @@ def conv_max_19(filter, conv_1=False):
             return result
 
         elif filter >= 256:
-            result = forth_conv_max(filter)(input)
+            result = quadruple_conv_max(filter)(input)
 
             return result
 
@@ -180,46 +180,27 @@ def make_model(layer, conv_1 = False) :
 
     input = Input(shape=(224,224,3))
 
-    filter = 64
     if layer == 11:
         convolutional_layer = conv_block(conv_max_11,conv_1)(input)
 
-        # return convolutional_layer
 
     if layer == 13:
         convolutional_layer = conv_block(conv_max_13,conv_1)(input)
 
-        # return convolutional_layer
 
     if layer == 16:
         convolutional_layer = conv_block(conv_max_16,conv_1)(input)
 
 
-        # return convolutional_layer
-
     if layer == 19:
         convolutional_layer = conv_block(conv_max_19,conv_1)(input)
 
-        # return convolutional_layer
-
-    # if layer == 11 :
-    #     # LRN_11 = LRN
-    #     conv_block = Conv_layer(layer)(input)
-    #
-    # if layer == 13:
-    #     conv_block = Conv_layer(layer)(input)
-    #
-    # if layer == 16 :
-    #     conv1_16 = conv_1
-    #     conv_block = Conv_layer(layer, conv1_16)(input)
-    #
-    # if layer == 19 :
-    #     conv_block = Conv_layer(layer)(input)
 
     flatten = Flatten()(convolutional_layer)
     dense1 = Dense(units=4096, activation="relu")(flatten)
     dense2 = Dense(units=4096, activation="relu")(dense1)
     Last_layer = Dense(units=1000, activation="softmax")(dense2)
+
     model = Model(inputs=input, outputs=Last_layer)
 
     return model
