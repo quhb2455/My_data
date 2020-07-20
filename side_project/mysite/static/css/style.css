@@ -1,0 +1,54 @@
+html, body
+    {
+        height:100%;
+    }
+
+div.box
+    {
+        height:100%;
+    }
+
+div.left
+    {
+        border: solid;
+        float:left;
+        width:49%;
+        height:100%
+    }
+
+div.right
+    {
+        border:solid;
+        float:right;
+        width:49%;
+        height:100%
+    }
+
+
+div.show{
+
+height:80%;
+text-align:center;
+vertical-align:bottom;
+}
+
+div.layer{
+height:20%;
+text-align:center;
+vertical-align:bottom;
+}
+
+.ln{
+width:200px;
+height:30px;
+margin:20px auto;
+text-align: center;
+font-size: larger;
+border:solid red;
+border-radius:30px;
+vertical-align:top;
+
+
+
+}
+

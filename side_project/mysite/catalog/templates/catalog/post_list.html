@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+
+<html lang="en" >
+
+<head>
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://unpkg.com/vue-router"></script>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+
+<body>
+
+
+<div class="box">
+        <div class="left">
+        {{abc}}
+
+
+        </div>
+        <div class="right" id="exp">
+
+            <div class="show">
+                <form action="addlayer" method="POST">
+                    {% csrf_token %}
+                    <component v-for="item in layers":is="item" v-bind:class="layer_name"></component><br>
+                    <input type="submit" value="layer"/> <!-- 이 버튼 누르면 -->
+                </form>
+
+            </div>
+            <div class="layer" >
+
+
+                    <select class="layers" v-model="layer_name" name="layer">
+
+                        {% for name in names%}
+                        <option value="{{name.name}}">{{name.name}}</option>
+                        {% endfor %}
+
+                    </select>
+
+                <button v-on:click="add">+</button><br>
+            </div>
+
+
+
+
+
+        </div>
+    </div>
+
+<script>
+    Vue.component('layers', {
+            template:'<div><input type="text" class="ln" v-bind:value="[ count ]" v-bind:class="[ count ]"readonly></input></div>'
+            ,delimiters:['[[',']]']
+            ,data: function(){
+                return {
+                    a:'hff',
+                    count:app.layer_name
+                }
+
+            }
+            ,methods:{
+
+            }
+        })
+
+    var app = new Vue({
+        el:'#exp',
+        delimiters:['[[',']]'],
+        data: {
+            layers:[],
+            layer_name:''
+        },
+        methods:{
+            add(){
+                this.layers.push('layers')
+            }
+        }
+    })
+</script>
+</body>
+</html>
