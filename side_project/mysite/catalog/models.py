@@ -8,13 +8,21 @@ from django.conf import settings
 
 class Conv2d(models.Model) :
     _filter = models.IntegerField()
-    kernel_size = models.IntegerField()
-    strides = models.IntegerField()
+    kernel_size = models.CharField(max_length=20)
+    strides = models.CharField(max_length=20)
     activation_fuc = models.CharField(max_length=50)
     padding = models.CharField(max_length=20)
     def publish(self):
         """Return the url to access a particular instance of MyModelName"""
         self.save()
+
+class MaxPooling2D(models.Model) :
+    kernel_size = models.CharField(max_length=20)
+    strides = models.CharField(max_length=20)
+    def publish(self):
+        """Return the url to access a particular instance of MyModelName"""
+        self.save()
+
 
 class Input(models.Model) :
     input_shape = models.CharField(max_length=10)
@@ -25,6 +33,7 @@ class Input(models.Model) :
 
 class layers_name(models.Model) :
     name = models.CharField(max_length=20)
+
     def publish(self):
         """Return the url to access a particular instance of MyModelName"""
         self.save()

@@ -16,7 +16,12 @@
 
 <div class="box">
         <div class="left">
-        {{abc}}
+
+            {% for ClassInfo in ClassInfos%}
+            <div>{{ name }}</div>
+            <div>{{ name.id }}</div>
+            {% endfor %}
+
 
 
         </div>
@@ -25,7 +30,7 @@
             <div class="show">
                 <form action="addlayer" method="POST">
                     {% csrf_token %}
-                    <component v-for="item in layers":is="item" v-bind:class="layer_name"></component><br>
+                    <component v-for="item in layers":is="item" v-on:click="show_contents"></component><br>
                     <input type="submit" value="layer"/> <!-- 이 버튼 누르면 -->
                 </form>
 
@@ -53,16 +58,18 @@
 
 <script>
     Vue.component('layers', {
-            template:'<div><input type="text" class="ln" v-bind:value="[ count ]" v-bind:class="[ count ]"readonly></input></div>'
+            template:'<div><input type="text" class="ln" name="name"  v-bind:value="[ count ]" v-bind:class="[ count ]"readonly></input></div>'
             ,delimiters:['[[',']]']
             ,data: function(){
                 return {
-                    a:'hff',
                     count:app.layer_name
                 }
 
             }
             ,methods:{
+                show_contents(){
+
+                }
 
             }
         })
