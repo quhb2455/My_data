@@ -12,25 +12,34 @@
 
 
 <body>
-
+<!-- ▷▶▷▶▷▶▷▶ 클릭하는 layer에 맞춰서 left에서 입력 필드 보여주기,. 현재는 누르면 입력 필드가 맞춰서 뜨는게 아니라 그냥 다뜸 ◁◀◁◀◁◀◁◀-->
 
 <div class="box">
-        <div class="left">
+        <div class="left" id="left">
 
-            {% for ClassInfo in ClassInfos%}
-            <div>{{ name }}</div>
-            <div>{{ name.id }}</div>
+            {% for ClassInfo in Info%}
+            <div class="{{ ClassInfo.0 }}" v-show="isShowOn">
+                <div>
+                    <p>{{ ClassInfo.0 }}</p>
+                    {% for count in ClassInfo %}
+                        {% if count != ClassInfo.0 %}
+                            <p> {{ count }} <input type="text" name="name"></p>
+                        {% endif %}
+                    {% endfor %}
+
+                </div>
+            </div>
             {% endfor %}
 
 
 
         </div>
-        <div class="right" id="exp">
+        <div class="right" id="right">
 
             <div class="show">
                 <form action="addlayer" method="POST">
                     {% csrf_token %}
-                    <component v-for="item in layers":is="item" v-on:click="show_contents"></component><br>
+                    <component v-for="item in layers":is="item" ></component><br>
                     <input type="submit" value="layer"/> <!-- 이 버튼 누르면 -->
                 </form>
 
@@ -40,13 +49,13 @@
 
                     <select class="layers" v-model="layer_name" name="layer">
 
-                        {% for name in names%}
-                        <option value="{{name.name}}">{{name.name}}</option>
+                        {% for name in Info%}
+                        <option value="{{name.0}}">{{name.0}}</option>
                         {% endfor %}
 
                     </select>
 
-                <button v-on:click="add">+</button><br>
+                <button v-on:click="this.add">+</button><br>
             </div>
 
 
@@ -58,7 +67,7 @@
 
 <script>
     Vue.component('layers', {
-            template:'<div><input type="text" class="ln" name="name"  v-bind:value="[ count ]" v-bind:class="[ count ]"readonly></input></div>'
+            template:'<div><input type="text" class="ln" name="name"  v-bind:value="[ count ]" v-bind:class="[ count ]" @click="show_contents" readonly></input></div>'
             ,delimiters:['[[',']]']
             ,data: function(){
                 return {
@@ -68,14 +77,14 @@
             }
             ,methods:{
                 show_contents(){
-
+                    app2.isShowOn = !app2.isShowOn
                 }
 
             }
         })
 
     var app = new Vue({
-        el:'#exp',
+        el:'#right',
         delimiters:['[[',']]'],
         data: {
             layers:[],
@@ -85,6 +94,14 @@
             add(){
                 this.layers.push('layers')
             }
+        }
+    })
+
+    var app2 = new Vue({
+        el:'#left',
+        delimiters:['[[',']]'],
+        data:{
+            isShowOn:false
         }
     })
 </script>

@@ -4,13 +4,16 @@ class CheckClassName :
 
     def CheckName(name):
         if 'Input' == name :
-            return Input()
+            field = [name,'input_shape']
+            return field
 
         if 'Conv2d' == name :
-            return Conv2d()
+            field = [name,'_filter', 'activation_fuc' , 'padding', 'strides', 'kernel_size']
+            return field
 
         if 'MaxPooling2D' == name :
-            return MaxPooling2D()
+            field = [name,'kernel_size', 'strides']
+            return field
 
 
 

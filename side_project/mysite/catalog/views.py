@@ -10,15 +10,15 @@ from django.http import HttpResponse, HttpResponseRedirect
 def post_list(request):
     #쿼리셋을 담은 변수
     names = layers_name.objects.values() #layer_name에서 layers 이름 전부를 불러옴
-    print(layers_name)
     ClassInfoList =[]
+
     for name in names :
-        #클래스를 가져왔는데 objects에 접근이 안됨 ㅎ.,ㅎ
+        #class name에 맞춰서 objects.values()를 리턴함.
         ClassName = CheckClassName.CheckName(name['name'])
-        #print(ClassName.objects.values())
-        #ClassInfoList.append(ClassName.objects.values())
-    member = Member.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
-    return render(request, 'catalog/post_list.html', {'names' : names })#, 'ClassInfos':ClassInfoList})
+        print(ClassName)
+        ClassInfoList.append(ClassName)
+    print(ClassInfoList)
+    return render(request, 'catalog/post_list.html', {'Info' : ClassInfoList })#, 'ClassInfos':ClassInfoList})
 
 
 def create(request) :
